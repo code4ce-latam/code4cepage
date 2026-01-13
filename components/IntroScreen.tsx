@@ -94,17 +94,7 @@ export default function IntroScreen() {
             {siteConfig.tagline}
           </p>
 
-          <button
-            onClick={() => router.push("/home")}
-            className={`px-8 py-3 text-white rounded-lg font-bold transition-colors duration-200 ${isMobile ? 'mt-2' : 'mt-4'}`}
-            style={{ backgroundColor: '#00D0C0' }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#00AFA3'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#00D0C0'}
-          >
-            {introCopy.button}
-          </button>
-
-          {/* Red neuronal dentro del contenedor en móvil */}
+          {/* Red neuronal dentro del contenedor en móvil - antes del botón */}
           {mounted && isMobile && (
             <div className="relative w-full" style={{ 
               height: '200px', 
@@ -114,6 +104,16 @@ export default function IntroScreen() {
               <HoloVectorLinesBackground hoverActive={isHovered} isMobile={true} />
             </div>
           )}
+
+          <button
+            onClick={() => router.push("/home")}
+            className={`px-8 py-3 text-white rounded-lg font-bold transition-colors duration-200 ${isMobile ? 'mt-2' : 'mt-4'}`}
+            style={{ backgroundColor: '#00D0C0' }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#00AFA3'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#00D0C0'}
+          >
+            {introCopy.button}
+          </button>
         </div>
       </div>
     </div>
