@@ -20,9 +20,22 @@ export default function IntroScreen() {
   const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    
+    // Detectar si es móvil
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   return (
@@ -35,9 +48,9 @@ export default function IntroScreen() {
       {/* Fondo de líneas vectoriales holográficas */}
       {mounted && <HoloVectorLinesBackground hoverActive={isHovered} />}
 
-      {/* Contenido a la izquierda */}
+      {/* Contenido - responsive: horizontal en desktop, vertical en móvil */}
       <div 
-        className="absolute inset-0 flex items-center z-10" 
+        className="absolute inset-0 flex z-10" 
         style={{ 
           zIndex: 10, 
           position: 'absolute', 
@@ -46,17 +59,22 @@ export default function IntroScreen() {
           right: 0, 
           bottom: 0, 
           display: 'flex', 
+          flexDirection: isMobile ? 'column' : 'row',
           alignItems: 'center', 
-          justifyContent: 'flex-start',
-          paddingLeft: 'clamp(5%, 8vw, 10%)',
-          paddingRight: '0'
+          justifyContent: isMobile ? 'center' : 'flex-start',
+          paddingLeft: isMobile ? 'clamp(5%, 8vw, 10%)' : 'clamp(5%, 8vw, 10%)',
+          paddingRight: isMobile ? 'clamp(5%, 8vw, 10%)' : '0',
+          paddingTop: isMobile ? '0' : '0',
         }}
       >
-        <div className="text-right space-y-6 animate-fade-in" style={{ 
-          maxWidth: 'clamp(40%, 33.33vw, 33.33%)', 
-          width: 'clamp(40%, 33.33vw, 33.33%)' 
+        <div className={`animate-fade-in ${isMobile ? 'text-center w-full max-w-md flex flex-col items-center justify-center' : 'text-right'}`} style={{ 
+          maxWidth: isMobile ? '90%' : 'clamp(40%, 33.33vw, 33.33%)', 
+          width: isMobile ? '90%' : 'clamp(40%, 33.33vw, 33.33%)',
+          gap: isMobile ? 'clamp(1rem, 2vh, 1.5rem)' : '1.5rem',
+          paddingTop: isMobile ? 'clamp(2vh, 4vh, 6vh)' : '0',
+          paddingBottom: isMobile ? 'clamp(2vh, 4vh, 6vh)' : '0',
         }}>
-          <div className="relative flex justify-end">
+          <div className={`relative flex ${isMobile ? 'justify-center' : 'justify-end'}`}>
             <Image
               src="/brand/code4ce-logo-no-bg.png"
               alt="CODE4CE"
@@ -68,17 +86,17 @@ export default function IntroScreen() {
             />
           </div>
 
-          <h2 className="text-3xl sm:text-4xl font-bold" style={{ color: '#111827' }}>
+          <h2 className={`font-bold ${isMobile ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl'}`} style={{ color: '#111827' }}>
             <StreamingText text="Automatización e IA" />
           </h2>
 
-          <p className="text-base sm:text-lg" style={{ color: '#6B7280' }}>
+          <p className={`${isMobile ? 'text-sm sm:text-base' : 'text-base sm:text-lg'}`} style={{ color: '#6B7280' }}>
             {siteConfig.tagline}
           </p>
 
           <button
             onClick={() => router.push("/home")}
-            className="mt-4 px-8 py-3 text-white rounded-lg font-bold transition-colors duration-200"
+            className={`px-8 py-3 text-white rounded-lg font-bold transition-colors duration-200 ${isMobile ? 'mt-2' : 'mt-4'}`}
             style={{ backgroundColor: '#00D0C0' }}
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#00AFA3'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#00D0C0'}

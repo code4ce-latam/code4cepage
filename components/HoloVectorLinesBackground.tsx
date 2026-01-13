@@ -192,43 +192,93 @@ export default function HoloVectorLinesBackground({
     let rightSectionWidth: number;
     let gapBetweenSections: number;
 
+    let startX: number;
+
     if (isMobile) {
-      // En móviles: distribución con espacio entre secciones
-      // Contenido izquierdo ocupa ~40%, gap de ~20%, red neuronal ~40%
-      leftSectionWidth = width * 0.4;
-      gapBetweenSections = width * 0.2; // Espacio entre secciones (aumentado)
-      rightSectionWidth = width * 0.4;
+      // En móviles: centrar la red neuronal horizontalmente (debajo del contenido)
+      startX = width / 2 - totalNetworkWidth / 2;
     } else {
       // En desktop: distribución 1/3 - 2/3
       leftSectionWidth = width / 3;
-      gapBetweenSections = 0; // Sin gap en desktop
       rightSectionWidth = (width * 2) / 3;
-    }
 
-    // El punto de división entre las secciones (con gap)
-    const divisionPoint = leftSectionWidth + gapBetweenSections;
+      // El punto de división entre las secciones
+      const divisionPoint = leftSectionWidth;
 
-    // Centrar la red neuronal en el área derecha
-    const rightAreaStart = divisionPoint;
-    const rightAreaCenter = rightAreaStart + rightSectionWidth / 2;
+      // Centrar la red neuronal en el área derecha
+      const rightAreaStart = divisionPoint;
+      const rightAreaCenter = rightAreaStart + rightSectionWidth / 2;
 
-    // Centrar la red neuronal en el centro del área derecha
-    // Asegurar que no se salga de los límites
-    const minX = rightAreaStart + 10; // Margen mínimo desde el borde
-    const maxX = width - 10; // Margen mínimo desde el borde derecho
-    let startX = rightAreaCenter - totalNetworkWidth / 2;
+      // Centrar la red neuronal en el centro del área derecha
+      // Asegurar que no se salga de los límites
+      const minX = rightAreaStart + 10; // Margen mínimo desde el borde
+      const maxX = width - 10; // Margen mínimo desde el borde derecho
+      startX = rightAreaCenter - totalNetworkWidth / 2;
 
-    // Ajustar si la red se sale de los límites
-    if (startX < minX) {
-      startX = minX;
-    } else if (startX + totalNetworkWidth > maxX) {
-      startX = maxX - totalNetworkWidth;
+      // Ajustar si la red se sale de los límites
+      if (startX < minX) {
+        startX = minX;
+      } else if (startX + totalNetworkWidth > maxX) {
+        startX = maxX - totalNetworkWidth;
+      }
     }
 
     // Centrar la red verticalmente en la pantalla
-    // En móviles, ajustar ligeramente hacia arriba para mejor visibilidad
-    const verticalOffset = isMobile ? -20 : 0;
-    const startY = height / 2 + verticalOffset;
+    // En móviles, distribuir uniformemente con el contenido centrado
+    let startY: number;
+    if (isMobile) {
+      // En móviles: centrar todo el contenido verticalmente
+      // Calcular el espacio total disponible y distribuir uniformemente
+
+      // Estimar alturas de elementos (más compactas para móviles)
+      const logoHeight = 80; // Logo más pequeño en móvil
+      const textHeight = 50; // "Automatización e IA"
+      const taglineHeight = 25; // Tagline
+      const buttonHeight = 45; // Botón
+      const spacingBetween = 40; // Espaciado entre elementos (gap responsive)
+
+      // Altura total del contenido (sin la red neuronal)
+      const contentHeight =
+        logoHeight +
+        textHeight +
+        taglineHeight +
+        buttonHeight +
+        spacingBetween * 3;
+
+      // Espacio para la red neuronal
+      const spacingAroundNetwork = 25; // Espacio antes y después de la red
+      const totalContentHeight =
+        contentHeight + totalNetworkHeight + spacingAroundNetwork * 2;
+
+      // Si el contenido total cabe en la pantalla, centrarlo
+      if (totalContentHeight < height * 0.85) {
+        // Centrar todo el bloque de contenido verticalmente
+        const topOffset = (height - totalContentHeight) / 2;
+        // La red neuronal va después del tagline, antes del botón
+        const contentBeforeNetwork =
+          logoHeight + textHeight + taglineHeight + spacingBetween * 2;
+        startY =
+          topOffset +
+          contentBeforeNetwork +
+          spacingAroundNetwork +
+          totalNetworkHeight / 2;
+      } else {
+        // Si no cabe, distribuir de manera más compacta pero centrada
+        const contentBeforeNetwork =
+          logoHeight + textHeight + taglineHeight + spacingBetween * 2;
+        const spacingAfterTagline = 20;
+        startY =
+          contentBeforeNetwork + spacingAfterTagline + totalNetworkHeight / 2;
+
+        // Asegurar que no se salga de la pantalla
+        if (startY + totalNetworkHeight / 2 > height - 25) {
+          startY = height - totalNetworkHeight / 2 - 25;
+        }
+      }
+    } else {
+      // En desktop: centrar verticalmente
+      startY = height / 2;
+    }
 
     // Crear neuronas por capa
     for (let layer = 0; layer < config.numLayers; layer++) {

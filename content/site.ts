@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "CODE4CE",
-  tagline: "Technology & Innovation",
+  tagline: "Soluciones tecnológicas a medida",
   email: "contacto@code4ce.com",
   whatsapp: "+1234567890", // placeholder
 };
