@@ -224,55 +224,149 @@ export default function HoloVectorLinesBackground({
     }
 
     // Centrar la red verticalmente en la pantalla
-    // En móviles, distribuir uniformemente con el contenido centrado
+    // En móviles, posicionar antes del botón sin traslapes ni al final
     let startY: number;
     if (isMobile) {
-      // En móviles: centrar todo el contenido verticalmente
-      // Calcular el espacio total disponible y distribuir uniformemente
+      // SOLUCIÓN DEFINITIVA: Calcular áreas ocupadas por cada elemento y evitar superposiciones
 
-      // Estimar alturas de elementos (más compactas para móviles)
-      const logoHeight = 80; // Logo más pequeño en móvil
-      const textHeight = 50; // "Automatización e IA"
-      const taglineHeight = 25; // Tagline
-      const buttonHeight = 45; // Botón
-      const spacingBetween = 40; // Espaciado entre elementos (gap responsive)
+      // 1. Calcular padding y márgenes del contenedor
+      const containerPaddingTop = Math.max(height * 0.01, 8); // clamp(1vh, 2vh, 3vh) - usar mínimo seguro
+      const containerPaddingBottom = Math.max(height * 0.02, 16); // clamp(2vh, 3vh, 4vh) - usar mínimo seguro
+      const containerPaddingLeft = width * 0.05; // 5% del ancho
+      const containerPaddingRight = width * 0.05; // 5% del ancho
 
-      // Altura total del contenido (sin la red neuronal)
-      const contentHeight =
-        logoHeight +
-        textHeight +
-        taglineHeight +
-        buttonHeight +
-        spacingBetween * 3;
+      // 2. Calcular áreas ocupadas por cada elemento (con márgenes de seguridad)
+      const safetyMargin = 20; // Margen de seguridad adicional para evitar traslapes
+      const gapSize = 24; // gap del contenedor (clamp(1rem, 2vh, 1.5rem))
 
-      // Espacio para la red neuronal
-      const spacingAroundNetwork = 25; // Espacio antes y después de la red
-      const totalContentHeight =
-        contentHeight + totalNetworkHeight + spacingAroundNetwork * 2;
+      // Logo
+      const logoTop = containerPaddingTop;
+      const logoHeight = 90;
+      const logoBottom = logoTop + logoHeight;
+      const logoLeft = containerPaddingLeft;
+      const logoRight = width - containerPaddingRight;
 
-      // Si el contenido total cabe en la pantalla, centrarlo
-      if (totalContentHeight < height * 0.85) {
-        // Centrar todo el bloque de contenido verticalmente
-        const topOffset = (height - totalContentHeight) / 2;
-        // La red neuronal va después del tagline, antes del botón
-        const contentBeforeNetwork =
-          logoHeight + textHeight + taglineHeight + spacingBetween * 2;
+      // Texto "Automatización e IA"
+      const textTop = logoBottom + gapSize;
+      const textHeight = 60; // Aumentado para seguridad
+      const textBottom = textTop + textHeight;
+      const textLeft = containerPaddingLeft;
+      const textRight = width - containerPaddingRight;
+
+      // Tagline
+      const taglineTop = textBottom + gapSize;
+      const taglineHeight = 32; // Aumentado para seguridad
+      const taglineBottom = taglineTop + taglineHeight;
+      const taglineLeft = containerPaddingLeft;
+      const taglineRight = width - containerPaddingRight;
+
+      // Botón
+      const buttonMarginTop = 8; // mt-2
+      const buttonTop = taglineBottom + gapSize + buttonMarginTop;
+      const buttonHeight = 48;
+      const buttonBottom = buttonTop + buttonHeight;
+      const buttonLeft = containerPaddingLeft;
+      const buttonRight = width - containerPaddingRight;
+
+      // 3. Calcular área disponible para la red neuronal
+      // La red neuronal debe estar completamente debajo del botón
+      const minSpacingAfterButton = 120; // Espacio mínimo después del botón - aumentado para ubicar más abajo
+      const availableTop = buttonBottom + minSpacingAfterButton;
+      const availableBottom = height - containerPaddingBottom;
+      const availableHeight = availableBottom - availableTop;
+
+      // 4. Verificar si hay espacio suficiente para la red neuronal
+      if (availableHeight < totalNetworkHeight + 40) {
+        // Si no hay espacio suficiente, reducir el tamaño de la red o no mostrarla
+        // Por ahora, ajustar la posición para que quepa
         startY =
-          topOffset +
-          contentBeforeNetwork +
-          spacingAroundNetwork +
-          totalNetworkHeight / 2;
+          availableTop + Math.min(totalNetworkHeight, availableHeight - 40) / 2;
       } else {
-        // Si no cabe, distribuir de manera más compacta pero centrada
-        const contentBeforeNetwork =
-          logoHeight + textHeight + taglineHeight + spacingBetween * 2;
-        const spacingAfterTagline = 20;
-        startY =
-          contentBeforeNetwork + spacingAfterTagline + totalNetworkHeight / 2;
+        // Hay espacio suficiente, centrar la red neuronal en el área disponible
+        startY = availableTop + availableHeight / 2;
+      }
 
-        // Asegurar que no se salga de la pantalla
-        if (startY + totalNetworkHeight / 2 > height - 25) {
-          startY = height - totalNetworkHeight / 2 - 25;
+      // 5. Verificación final: asegurar que la red neuronal NO se superponga con ningún elemento
+      // Calcular el mínimo top requerido para evitar superposiciones con TODOS los elementos
+      const networkLeft = startX;
+      const networkRight = startX + totalNetworkWidth;
+
+      // Calcular mínimos requeridos para cada elemento (solo si hay superposición horizontal)
+      const minTopForLogo =
+        networkLeft < logoRight && networkRight > logoLeft
+          ? logoBottom + safetyMargin + totalNetworkHeight / 2
+          : 0;
+
+      const minTopForText =
+        networkLeft < textRight && networkRight > textLeft
+          ? textBottom + safetyMargin + totalNetworkHeight / 2
+          : 0;
+
+      const minTopForTagline =
+        networkLeft < taglineRight && networkRight > taglineLeft
+          ? taglineBottom + safetyMargin + totalNetworkHeight / 2
+          : 0;
+
+      const minTopForButton =
+        networkLeft < buttonRight && networkRight > buttonLeft
+          ? buttonBottom + safetyMargin + totalNetworkHeight / 2
+          : 0;
+
+      // Usar el mayor de todos los mínimos requeridos
+      const requiredMinTop = Math.max(
+        minTopForLogo,
+        minTopForText,
+        minTopForTagline,
+        minTopForButton,
+        availableTop + totalNetworkHeight / 2 // Mínimo absoluto después del botón
+      );
+
+      // Aplicar el mínimo requerido
+      if (startY < requiredMinTop) {
+        startY = requiredMinTop;
+      }
+
+      // 6. Verificar límites de la pantalla (después de aplicar mínimos)
+      const finalNetworkTop = startY - totalNetworkHeight / 2;
+      const finalNetworkBottom = startY + totalNetworkHeight / 2;
+
+      if (finalNetworkTop < containerPaddingTop) {
+        startY = containerPaddingTop + totalNetworkHeight / 2;
+      }
+
+      if (finalNetworkBottom > height - containerPaddingBottom) {
+        startY = height - containerPaddingBottom - totalNetworkHeight / 2;
+      }
+
+      // 7. Verificación final absoluta: re-verificar que esté debajo del botón después de ajustes
+      const finalAbsoluteMinTop = buttonBottom + minSpacingAfterButton;
+      if (startY - totalNetworkHeight / 2 < finalAbsoluteMinTop) {
+        startY = finalAbsoluteMinTop + totalNetworkHeight / 2;
+
+        // Si aún no cabe después de este ajuste, ajustar al límite de pantalla
+        if (startY + totalNetworkHeight / 2 > height - containerPaddingBottom) {
+          startY = height - containerPaddingBottom - totalNetworkHeight / 2;
+
+          // Si después de este ajuste aún se traslapa con el botón, no mostrar la red
+          // (o reducir su tamaño - por ahora ajustamos al mínimo)
+          if (startY - totalNetworkHeight / 2 < buttonBottom + 50) {
+            startY = buttonBottom + 50 + totalNetworkHeight / 2;
+          }
+        }
+      }
+
+      // 8. Ajuste adicional: mover la red neuronal más abajo si hay espacio disponible
+      // Calcular espacio disponible en la parte inferior
+      const availableSpaceBelow =
+        height - containerPaddingBottom - (startY + totalNetworkHeight / 2);
+      if (availableSpaceBelow > 40) {
+        // Si hay más de 40px de espacio disponible, mover la red un poco más abajo
+        const extraSpacing = Math.min(availableSpaceBelow - 20, 60); // Máximo 60px adicional
+        startY += extraSpacing;
+
+        // Verificar que no se salga de la pantalla
+        if (startY + totalNetworkHeight / 2 > height - containerPaddingBottom) {
+          startY = height - containerPaddingBottom - totalNetworkHeight / 2;
         }
       }
     } else {

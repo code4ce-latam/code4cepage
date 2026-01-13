@@ -71,8 +71,8 @@ export default function IntroScreen() {
           maxWidth: isMobile ? '90%' : 'clamp(40%, 33.33vw, 33.33%)', 
           width: isMobile ? '90%' : 'clamp(40%, 33.33vw, 33.33%)',
           gap: isMobile ? 'clamp(1rem, 2vh, 1.5rem)' : '1.5rem',
-          paddingTop: isMobile ? 'clamp(2vh, 4vh, 6vh)' : '0',
-          paddingBottom: isMobile ? 'clamp(2vh, 4vh, 6vh)' : '0',
+          paddingTop: isMobile ? 'clamp(1vh, 2vh, 3vh)' : '0',
+          paddingBottom: isMobile ? 'clamp(2vh, 3vh, 4vh)' : '0',
         }}>
           <div className={`relative flex ${isMobile ? 'justify-center' : 'justify-end'}`}>
             <Image
