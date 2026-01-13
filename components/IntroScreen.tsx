@@ -45,8 +45,8 @@ export default function IntroScreen() {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Fondo de líneas vectoriales holográficas */}
-      {mounted && <HoloVectorLinesBackground hoverActive={isHovered} />}
+      {/* Fondo de líneas vectoriales holográficas - solo en desktop */}
+      {mounted && !isMobile && <HoloVectorLinesBackground hoverActive={isHovered} isMobile={false} />}
 
       {/* Contenido - responsive: horizontal en desktop, vertical en móvil */}
       <div 
@@ -67,7 +67,7 @@ export default function IntroScreen() {
           paddingTop: isMobile ? '0' : '0',
         }}
       >
-        <div className={`animate-fade-in ${isMobile ? 'text-center w-full max-w-md flex flex-col items-center justify-center' : 'text-right'}`} style={{ 
+        <div className={`animate-fade-in ${isMobile ? 'text-center w-full max-w-md flex flex-col items-center justify-center relative' : 'text-right'}`} style={{ 
           maxWidth: isMobile ? '90%' : 'clamp(40%, 33.33vw, 33.33%)', 
           width: isMobile ? '90%' : 'clamp(40%, 33.33vw, 33.33%)',
           gap: isMobile ? 'clamp(1rem, 2vh, 1.5rem)' : '1.5rem',
@@ -103,6 +103,17 @@ export default function IntroScreen() {
           >
             {introCopy.button}
           </button>
+
+          {/* Red neuronal dentro del contenedor en móvil */}
+          {mounted && isMobile && (
+            <div className="relative w-full" style={{ 
+              height: '200px', 
+              marginTop: 'clamp(1rem, 2vh, 1.5rem)',
+              minHeight: '150px'
+            }}>
+              <HoloVectorLinesBackground hoverActive={isHovered} isMobile={true} />
+            </div>
+          )}
         </div>
       </div>
     </div>
