@@ -5,9 +5,10 @@ import { useEffect, useRef, useState } from "react";
 interface StreamingTextProps {
   text: string;
   className?: string;
+  delay?: number; // Delay en milisegundos antes de comenzar el streaming
 }
 
-export default function StreamingText({ text, className = "" }: StreamingTextProps) {
+export default function StreamingText({ text, className = "", delay = 0 }: StreamingTextProps) {
   const [displayText, setDisplayText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   const [isComplete, setIsComplete] = useState(false);
@@ -22,7 +23,7 @@ export default function StreamingText({ text, className = "" }: StreamingTextPro
     // Resetear estado al cambiar el texto
     setDisplayText("");
     setIsComplete(false);
-    setShowCursor(true);
+    setShowCursor(delay === 0); // Solo mostrar cursor si no hay delay
     indexRef.current = 0;
 
     // Efecto de escritura tipo streaming
@@ -48,17 +49,28 @@ export default function StreamingText({ text, className = "" }: StreamingTextPro
       }
     };
 
-    // Iniciar escritura
+    // Iniciar escritura después del delay
     const writeSpeed = 80;
-    intervalRef.current = setInterval(writeText, writeSpeed);
-
-    // Cursor parpadeante - solo mientras se escribe
-    cursorIntervalRef.current = setInterval(() => {
-      setShowCursor((prev) => !prev);
-    }, 530);
+    const startWriting = () => {
+      setShowCursor(true); // Mostrar cursor cuando comienza la escritura
+      intervalRef.current = setInterval(writeText, writeSpeed);
+      // Cursor parpadeante - solo mientras se escribe
+      cursorIntervalRef.current = setInterval(() => {
+        if (mountedRef.current) {
+          setShowCursor((prev) => !prev);
+        }
+      }, 530);
+    };
+    
+    const startDelay = delay > 0 
+      ? setTimeout(startWriting, delay) 
+      : startWriting();
 
     return () => {
       mountedRef.current = false;
+      if (startDelay) {
+        clearTimeout(startDelay);
+      }
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;

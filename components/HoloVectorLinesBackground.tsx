@@ -59,7 +59,7 @@ export default function HoloVectorLinesBackground({
     "#00D0C0", // 2. Teal principal
     "#00AFA3", // 3. Teal oscuro
     "#F86828", // 4. Naranja acento
-    "#333333", // 5. Gris oscuro
+    "#39005E", // 5. Morado oscuro (nuevo color del botón)
   ];
 
   // Configuración responsive mejorada
@@ -82,23 +82,23 @@ export default function HoloVectorLinesBackground({
       leftMarginPercent = 0.1; // 10% en pantallas grandes
     }
 
-    // Configuración base
-    const baseConfig = {
-      pulseSpeed: 0.7,
-      pulseInterval: 2.2,
-      colorTransitionDuration: 2.5,
-      activationWaveSpeed: 0.4,
-      movementSpeed: 0.35,
+    // Configuración acelerada para todos los dispositivos
+    const acceleratedConfig = {
+      pulseSpeed: 1.2, // Reducido: velocidad de pulsos en conexiones más lenta
+      pulseInterval: 1.0, // Pulsos muy frecuentes
+      colorTransitionDuration: 1.0, // Cambio de color muy rápido
+      activationWaveSpeed: 1.0, // Onda de activación muy rápida
+      movementSpeed: 1.3, // Aumentado: movimiento/rotación más rápido
       movementAmplitude: 10,
-      floatSpeed: 0.45,
+      floatSpeed: 1.5, // Aumentado: flotación/rotación más rápida
       floatAmplitude: 12,
       leftMarginPercent,
     };
 
-    // Ajustar dimensiones según tamaño de pantalla
+    // Ajustar dimensiones según tamaño de pantalla (todos usan configuración acelerada)
     if (isMobile) {
       return {
-        ...baseConfig,
+        ...acceleratedConfig, // Configuración acelerada también para móviles
         numLayers: 3, // Menos capas para móviles
         neuronsPerLayer: [3, 4, 3], // Menos neuronas por capa
         layerSpacing: 50, // Espaciado más compacto
@@ -108,7 +108,7 @@ export default function HoloVectorLinesBackground({
       };
     } else if (isTablet) {
       return {
-        ...baseConfig,
+        ...acceleratedConfig, // Configuración acelerada para tablets
         numLayers: 5,
         neuronsPerLayer: [5, 6, 7, 5, 3],
         layerSpacing: 90,
@@ -118,7 +118,7 @@ export default function HoloVectorLinesBackground({
       };
     } else if (isDesktop) {
       return {
-        ...baseConfig,
+        ...acceleratedConfig, // Configuración acelerada para desktop
         numLayers: 5,
         neuronsPerLayer: [6, 8, 10, 7, 4],
         layerSpacing: 120,
@@ -129,7 +129,7 @@ export default function HoloVectorLinesBackground({
     } else {
       // Large desktop
       return {
-        ...baseConfig,
+        ...acceleratedConfig, // Configuración acelerada para desktop grande
         numLayers: 5,
         neuronsPerLayer: [6, 8, 10, 7, 4],
         layerSpacing: 140,
@@ -265,20 +265,24 @@ export default function HoloVectorLinesBackground({
       }
     }
 
-    // Crear conexiones entre capas adyacentes
+    // Crear conexiones entre capas adyacentes (reducidas - solo 60% de las conexiones posibles)
+    const connectionProbability = 0.6; // 60% de probabilidad de crear cada conexión
     for (let layer = 0; layer < config.numLayers - 1; layer++) {
       const currentLayerNeurons = neurons.filter((n) => n.layer === layer);
       const nextLayerNeurons = neurons.filter((n) => n.layer === layer + 1);
 
       currentLayerNeurons.forEach((fromNeuron) => {
         nextLayerNeurons.forEach((toNeuron) => {
-          connections.push({
-            from: fromNeuron.id,
-            to: toNeuron.id,
-            weight: 0.3 + Math.random() * 0.4, // Peso aleatorio entre 0.3 y 0.7
-            pulseProgress: 0,
-            active: false,
-          });
+          // Solo crear conexión si pasa la probabilidad
+          if (Math.random() < connectionProbability) {
+            connections.push({
+              from: fromNeuron.id,
+              to: toNeuron.id,
+              weight: 0.3 + Math.random() * 0.4, // Peso aleatorio entre 0.3 y 0.7
+              pulseProgress: 0,
+              active: false,
+            });
+          }
         });
       });
     }

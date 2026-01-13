@@ -86,12 +86,15 @@ export default function IntroScreen() {
             />
           </div>
 
-          <h2 className={`font-bold ${isMobile ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl'}`} style={{ color: '#111827' }}>
+          <h2 className={`font-bold ${isMobile ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl'}`} style={{ color: '#39005E' }}>
             <StreamingText text="Automatización e IA" />
           </h2>
 
-          <p className={`${isMobile ? 'text-sm sm:text-base' : 'text-base sm:text-lg'}`} style={{ color: '#6B7280' }}>
-            {siteConfig.tagline}
+          <p className={`${isMobile ? 'text-sm sm:text-base' : 'text-base sm:text-lg'}`} style={{ color: '#39005E' }}>
+            <StreamingText 
+              text={siteConfig.tagline} 
+              delay={("Automatización e IA".length * 80) + 500} // Delay: tiempo de escritura del título + 500ms de espera
+            />
           </p>
 
           {/* Red neuronal dentro del contenedor en móvil - antes del botón */}
@@ -108,9 +111,9 @@ export default function IntroScreen() {
           <button
             onClick={() => router.push("/home")}
             className={`px-8 py-3 text-white rounded-lg font-bold transition-colors duration-200 ${isMobile ? 'mt-2' : 'mt-4'}`}
-            style={{ backgroundColor: '#00D0C0' }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#00AFA3'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#00D0C0'}
+            style={{ backgroundColor: '#39005E' }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2D0047'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#39005E'}
           >
             {introCopy.button}
           </button>
