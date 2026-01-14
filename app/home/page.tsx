@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Section from "@/components/Section";
 import { Button } from "@/components/Buttons";
+import { Monitor, Layers, Database, Cloud, Brain } from "lucide-react";
 import {
   heroCopy,
   services,
@@ -15,6 +16,15 @@ import {
   siteConfig,
 } from "@/content/site";
 
+// Iconos para las categorías de tecnología
+const TechnologyIcons = {
+  frontend: Monitor,
+  backend: Layers,
+  database: Database,
+  "cloud-devops": Cloud,
+  "ai-ml": Brain,
+};
+
 export default function HomePage() {
   const [formData, setFormData] = useState({
     name: "",
@@ -22,15 +32,42 @@ export default function HomePage() {
     message: "",
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    setFormSubmitted(true);
-    setTimeout(() => {
-      setFormSubmitted(false);
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        const errorMessage = data.details 
+          ? `${data.error}: ${data.details}` 
+          : data.error || 'Error al enviar el mensaje';
+        throw new Error(errorMessage);
+      }
+
+      setFormSubmitted(true);
       setFormData({ name: "", email: "", message: "" });
-    }, 3000);
+      setTimeout(() => {
+        setFormSubmitted(false);
+      }, 3000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al enviar el mensaje');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -190,10 +227,13 @@ export default function HomePage() {
             >
               <div className="flex items-center gap-4 mb-4">
                 <div
-                  className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
+                  className="w-12 h-12 rounded-lg flex items-center justify-center text-white flex-shrink-0"
                   style={{ backgroundColor: category.iconColor }}
                 >
-                  {category.icon}
+                  {(() => {
+                    const IconComponent = TechnologyIcons[category.id as keyof typeof TechnologyIcons];
+                    return IconComponent ? <IconComponent size={24} /> : null;
+                  })()}
                 </div>
                 <h3 className="text-xl font-bold" style={{ color: '#111827' }}>
                   {category.title}
@@ -354,8 +394,18 @@ export default function HomePage() {
                 }}
               />
             </div>
-            <Button type="submit" variant="primary" className="w-full">
-              {formSubmitted ? "Enviado ✓" : "Enviar"}
+            {error && (
+              <div className="p-4 rounded-lg bg-red-50 border border-red-200">
+                <p className="text-sm text-red-600">{error}</p>
+              </div>
+            )}
+            <Button 
+              type="submit" 
+              variant="primary" 
+              className="w-full"
+              disabled={isLoading || formSubmitted}
+            >
+              {isLoading ? "Enviando..." : formSubmitted ? "Enviado ✓" : "Enviar"}
             </Button>
           </form>
 

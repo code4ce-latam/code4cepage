@@ -104,9 +104,9 @@ export default function IntroScreen() {
           <button
             onClick={() => router.push("/home")}
             className={`px-8 py-3 text-white rounded-lg font-bold transition-colors duration-200 ${isMobile ? 'mt-2' : 'mt-4'}`}
-            style={{ backgroundColor: '#39005E' }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2D0047'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#39005E'}
+            style={{ backgroundColor: '#FA6A2D' }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E85A1F'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FA6A2D'}
           >
             {introCopy.button}
           </button>

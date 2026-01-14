@@ -51,19 +51,45 @@ codeforcepage/
 npm install
 ```
 
-2. Agregar assets de logos:
+2. Configurar variables de entorno:
+
+Crea un archivo `.env.local` en la raíz del proyecto con:
+
+```env
+RESEND_API_KEY=tu_api_key_aqui
+```
+
+Para obtener tu API key de Resend:
+
+- Regístrate en [resend.com](https://resend.com)
+- Ve a la sección de API Keys
+- Crea una nueva API key
+- Cópiala al archivo `.env.local`
+
+**Configuración del dominio en Resend:**
+
+- El código está configurado para usar `contacto@code4ce.com` como remitente.
+- Debes verificar el dominio `code4ce.com` en [resend.com/domains](https://resend.com/domains) antes de usar en producción.
+- Para verificar el dominio:
+  1. Ve a [resend.com/domains](https://resend.com/domains)
+  2. Agrega el dominio `code4ce.com`
+  3. Configura los registros DNS que Resend te proporciona
+  4. Una vez verificado, los correos se enviarán correctamente
+
+3. Agregar assets de logos:
 
 Coloca los siguientes archivos en `public/brand/`:
+
 - `code4ce-logo.png` (logo principal)
 - `code4ce-mark.png` (logo abreviado)
 
-3. Ejecutar en desarrollo:
+4. Ejecutar en desarrollo:
 
 ```bash
 npm run dev
 ```
 
-4. Abrir en el navegador:
+5. Abrir en el navegador:
 
 ```
 http://localhost:3000
@@ -76,7 +102,7 @@ http://localhost:3000
 
 ## Notas
 
-- El formulario de contacto actualmente hace `console.log` y muestra un mensaje de confirmación. La arquitectura está lista para integrar con un backend.
+- El formulario de contacto está integrado con Resend para el envío de correos electrónicos. Los mensajes se envían a `info@code4ce.com`.
 - El efecto typewriter está implementado con React hooks y no usa librerías externas.
 - Los logos deben estar en formato PNG y optimizados para web.
 
@@ -90,4 +116,3 @@ npm start
 ## Licencia
 
 Privado - CODE4CE
-

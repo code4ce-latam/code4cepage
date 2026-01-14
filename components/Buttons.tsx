@@ -9,6 +9,7 @@ interface ButtonProps {
   variant?: "primary" | "secondary" | "outline";
   className?: string;
   type?: "button" | "submit";
+  disabled?: boolean;
 }
 
 export function Button({
@@ -18,6 +19,7 @@ export function Button({
   variant = "primary",
   className = "",
   type = "button",
+  disabled = false,
 }: ButtonProps) {
   const baseStyles =
     "px-6 py-3 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
@@ -26,23 +28,23 @@ export function Button({
     switch (variant) {
       case "primary":
         return {
-          backgroundColor: "#39005E",
+          backgroundColor: "#FA6A2D",
           color: "#ffffff",
         };
       case "secondary":
         return {
-          backgroundColor: "#F86828",
+          backgroundColor: "#FA6A2D",
           color: "#ffffff",
         };
       case "outline":
         return {
-          border: "2px solid #39005E",
-          color: "#39005E",
+          border: "2px solid #FA6A2D",
+          color: "#FA6A2D",
           backgroundColor: "transparent",
         };
       default:
         return {
-          backgroundColor: "#39005E",
+          backgroundColor: "#FA6A2D",
           color: "#ffffff",
         };
     }
@@ -60,18 +62,18 @@ export function Button({
         style={variantStyles}
         onMouseEnter={(e) => {
           if (variant === "primary") {
-            e.currentTarget.style.backgroundColor = "#2D0047";
+            e.currentTarget.style.backgroundColor = "#E85A1F";
           } else if (variant === "outline") {
-            e.currentTarget.style.backgroundColor = "#39005E";
+            e.currentTarget.style.backgroundColor = "#FA6A2D";
             e.currentTarget.style.color = "#ffffff";
           }
         }}
         onMouseLeave={(e) => {
           if (variant === "primary") {
-            e.currentTarget.style.backgroundColor = "#39005E";
+            e.currentTarget.style.backgroundColor = "#FA6A2D";
           } else if (variant === "outline") {
             e.currentTarget.style.backgroundColor = "transparent";
-            e.currentTarget.style.color = "#39005E";
+            e.currentTarget.style.color = "#FA6A2D";
           }
         }}
       >
@@ -85,21 +87,24 @@ export function Button({
       type={type} 
       onClick={onClick} 
       className={baseClassName}
-      style={variantStyles}
+      style={disabled ? { ...variantStyles, opacity: 0.6, cursor: 'not-allowed' } : variantStyles}
+      disabled={disabled}
       onMouseEnter={(e) => {
+        if (disabled) return;
         if (variant === "primary") {
-          e.currentTarget.style.backgroundColor = "#2D0047";
+          e.currentTarget.style.backgroundColor = "#E85A1F";
         } else if (variant === "outline") {
-          e.currentTarget.style.backgroundColor = "#39005E";
+          e.currentTarget.style.backgroundColor = "#FA6A2D";
           e.currentTarget.style.color = "#ffffff";
         }
       }}
       onMouseLeave={(e) => {
+        if (disabled) return;
         if (variant === "primary") {
-          e.currentTarget.style.backgroundColor = "#39005E";
+          e.currentTarget.style.backgroundColor = "#FA6A2D";
         } else if (variant === "outline") {
           e.currentTarget.style.backgroundColor = "transparent";
-          e.currentTarget.style.color = "#39005E";
+          e.currentTarget.style.color = "#FA6A2D";
         }
       }}
     >
