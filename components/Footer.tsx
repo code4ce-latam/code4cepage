@@ -4,7 +4,7 @@ import { siteConfig } from "@/content/site";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-text text-white section-padding">
+    <footer className="text-white section-padding" style={{ backgroundColor: '#000000' }}>
       <div className="container-custom">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div className="md:col-span-2">
@@ -25,22 +25,57 @@ export default function Footer() {
             <h3 className="font-semibold mb-4">Enlaces</h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>
-                <Link href="#servicios" className="hover:text-teal-primary transition-colors">
+                <Link 
+                  href="#servicios" 
+                  className="transition-colors"
+                  style={{ color: '#6B7280' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#00D0C0'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#6B7280'}
+                >
                   Servicios
                 </Link>
               </li>
               <li>
-                <Link href="#metodologia" className="hover:text-teal-primary transition-colors">
+                <Link 
+                  href="#metodologia" 
+                  className="transition-colors"
+                  style={{ color: '#6B7280' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#00D0C0'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#6B7280'}
+                >
                   Metodología
                 </Link>
               </li>
               <li>
-                <Link href="#casos-uso" className="hover:text-teal-primary transition-colors">
-                  Casos de uso
+                <Link 
+                  href="#quienes-somos" 
+                  className="transition-colors"
+                  style={{ color: '#6B7280' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#00D0C0'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#6B7280'}
+                >
+                  Quiénes somos
                 </Link>
               </li>
               <li>
-                <Link href="#contacto" className="hover:text-teal-primary transition-colors">
+                <Link 
+                  href="#tecnologias" 
+                  className="transition-colors"
+                  style={{ color: '#6B7280' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#00D0C0'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#6B7280'}
+                >
+                  Tecnologías
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="#contacto" 
+                  className="transition-colors"
+                  style={{ color: '#6B7280' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#00D0C0'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#6B7280'}
+                >
                   Contacto
                 </Link>
               </li>
@@ -53,19 +88,12 @@ export default function Footer() {
               <li>
                 <a
                   href={`mailto:${siteConfig.email}`}
-                  className="hover:text-teal-primary transition-colors"
+                  className="transition-colors"
+                  style={{ color: '#6B7280' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#00D0C0'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#6B7280'}
                 >
                   {siteConfig.email}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`https://wa.me/${siteConfig.whatsapp.replace(/\D/g, "")}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-teal-primary transition-colors"
-                >
-                  WhatsApp
                 </a>
               </li>
             </ul>

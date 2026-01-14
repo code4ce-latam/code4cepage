@@ -87,15 +87,8 @@ export default function IntroScreen() {
           </div>
 
           <h2 className={`font-bold ${isMobile ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl'}`} style={{ color: '#39005E' }}>
-            <StreamingText text="Automatización e IA" />
+            <StreamingText text="Fuerza, tecnología y soluciones de software a medida" />
           </h2>
-
-          <p className={`${isMobile ? 'text-sm sm:text-base' : 'text-base sm:text-lg'}`} style={{ color: '#39005E' }}>
-            <StreamingText 
-              text={siteConfig.tagline} 
-              delay={("Automatización e IA".length * 80) + 500} // Delay: tiempo de escritura del título + 500ms de espera
-            />
-          </p>
 
           {/* Red neuronal dentro del contenedor en móvil - antes del botón */}
           {mounted && isMobile && (

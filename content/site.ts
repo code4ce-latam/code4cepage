@@ -1,6 +1,5 @@
 export const siteConfig = {
   name: "CODE4CE",
-  tagline: "Soluciones tecnológicas a medida",
   email: "contacto@code4ce.com",
   whatsapp: "+1234567890", // placeholder
 };
@@ -24,33 +23,23 @@ export const heroCopy = {
 
 export const services = [
   {
-    title: "Software a medida",
-    description: "Web apps, portales internos, módulos tipo ERP/CRM adaptados a tu manera de trabajar.",
-    icon: "💻",
-  },
-  {
-    title: "Automatización de procesos",
-    description: "Workflows, aprobaciones, reportes automáticos y alertas que reducen errores y ahorran tiempo.",
-    icon: "⚙️",
-  },
-  {
-    title: "IA aplicada a negocio",
-    description: "Extracción de datos de documentos, clasificación, asistentes internos para consultas de procesos/políticas.",
+    title: "IA",
+    description: "Soluciones de inteligencia artificial para automatizar procesos, analizar datos y tomar decisiones. Algoritmos personalizados e integración de herramientas de aprendizaje automático para impulsar tu negocio.",
     icon: "🤖",
   },
   {
-    title: "BI & analítica",
-    description: "Dashboards, KPIs y reporting gerencial con datos confiables y visibilidad en tiempo real.",
-    icon: "📊",
+    title: "Software a medida",
+    description: "Soluciones de software personalizadas para tu negocio. Aplicaciones web, móviles y de escritorio que impulsan la eficiencia y la innovación en tu empresa.",
+    icon: "💻",
   },
   {
-    title: "Integraciones & APIs",
-    description: "ERP/CRM, e-commerce, logística, facturación. Conectamos tus sistemas existentes.",
+    title: "Integración",
+    description: "Integración de sistemas empresariales para comunicación fluida entre tus plataformas. APIs personalizadas y soluciones de middleware para que todos tus sistemas trabajen en armonía.",
     icon: "🔌",
   },
   {
-    title: "Infraestructura & despliegue",
-    description: "Seguridad, monitoreo, releases controlados. Código mantenible y documentado.",
+    title: "Soporte",
+    description: "Mantenimiento continuo y soporte técnico para garantizar que tus sistemas funcionen de manera óptima. Resolución de problemas, actualizaciones y asistencia técnica siempre disponible.",
     icon: "🛡️",
   },
 ];
@@ -83,121 +72,80 @@ export const methodology = [
   },
 ];
 
-export const useCases = [
+export const aboutUs = [
   {
-    title: "Aprobaciones de compras y gastos",
-    description: "Workflow con trazabilidad completa, notificaciones y reportes de cumplimiento.",
+    title: "Somos Code4ce: fuerza, tecnología y soluciones de software a medida",
+    description: "Soluciones digitales a medida que impulsan tu negocio. En Code4ce nos especializamos en crear herramientas tecnológicas personalizadas para resolver desafíos reales. Diseñamos y desarrollamos software a medida, aplicaciones web y móviles, integraciones entre sistemas y soluciones basadas en inteligencia artificial. Nuestro enfoque es claro: entender tu necesidad, construir con precisión y ayudarte a crecer con la fuerza del código.",
   },
   {
-    title: "Panel gerencial de ventas, inventario y margen",
-    description: "Dashboard en tiempo real con KPIs, alertas y drill-down para decisiones rápidas.",
+    title: "Tecnología aplicada para resolver problemas reales",
+    description: "Automatizamos procesos, integramos sistemas y aplicamos inteligencia artificial para que tu empresa opere mejor y tome decisiones más inteligentes. En Code4ce trabajamos contigo para entender tu operación y desarrollar soluciones que realmente generen valor. Nuestra experiencia técnica está al servicio de tu negocio.",
   },
   {
-    title: "Integración ERP + e-commerce + logística",
-    description: "Sincronización automática de inventario, órdenes y envíos entre sistemas.",
-  },
-  {
-    title: "Automatización de reportes diarios/semanales",
-    description: "Generación y envío automático de reportes a gerencia sin intervención manual.",
-  },
-  {
-    title: "IA para extracción de datos de documentos",
-    description: "Procesamiento automático de facturas, órdenes y documentos con validación y clasificación.",
-  },
-  {
-    title: "Asistente interno para políticas/procesos",
-    description: "Chatbot que responde consultas operativas sobre procesos, políticas y procedimientos internos.",
+    title: "Un equipo ágil, técnico y comprometido con tu crecimiento",
+    description: "Somos una startup ecuatoriana con visión global. En Code4ce combinamos experiencia técnica, enfoque personalizado y acompañamiento constante para ayudarte a alcanzar tus objetivos digitales. Desde el primer contacto hasta el soporte post-lanzamiento, estamos contigo en cada etapa del camino.",
   },
 ];
 
-export const technologies = [
-  "Next.js",
-  "TypeScript",
-  "React",
-  "Node.js",
-  "PostgreSQL",
-  "MongoDB",
-  "AWS",
-  "Docker",
-  "Kubernetes",
-  "Python",
-  "OpenAI API",
-  "REST APIs",
-  "GraphQL",
-  "Redis",
-  "Elasticsearch",
-];
-
-export const differentiators = [
+export const technologyCategories = [
   {
-    title: "ROI medible",
-    description: "Tiempo ahorrado, errores reducidos, visibilidad mejorada. Métricas claras desde el día 1.",
+    id: "frontend",
+    title: "Frontend",
+    icon: "F",
+    gradient: "linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%)",
+    iconColor: "#0284C7",
+    technologies: [
+      { name: "Next.js", color: "#000000" },
+      { name: "React", color: "#0284C7" },
+      { name: "TypeScript", color: "#0284C7" },
+    ],
   },
   {
-    title: "Entregas por sprints",
-    description: "Demos funcionales cada 2-3 semanas. No esperas meses para ver resultados.",
+    id: "backend",
+    title: "Backend",
+    icon: "B",
+    gradient: "linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%)",
+    iconColor: "#10B981",
+    technologies: [
+      { name: "Node.js", color: "#10B981" },
+      { name: "Python", color: "#FCD34D" },
+      { name: "REST APIs", color: "#9333EA" },
+      { name: "GraphQL", color: "#EC4899" },
+    ],
   },
   {
-    title: "Código mantenible",
-    description: "Documentación técnica, buenas prácticas y arquitectura escalable. No deuda técnica oculta.",
+    id: "database",
+    title: "Database",
+    icon: "D",
+    gradient: "linear-gradient(135deg, #E9D5FF 0%, #DDD6FE 100%)",
+    iconColor: "#0284C7",
+    technologies: [
+      { name: "PostgreSQL", color: "#0284C7" },
+      { name: "MongoDB", color: "#10B981" },
+    ],
   },
   {
-    title: "Integración real",
-    description: "Conectamos con tus sistemas existentes. No trabajamos en silos.",
+    id: "cloud-devops",
+    title: "Cloud & DevOps",
+    icon: "C",
+    gradient: "linear-gradient(135deg, #FED7AA 0%, #FDBA74 100%)",
+    iconColor: "#F97316",
+    technologies: [
+      { name: "AWS", color: "#F97316" },
+      { name: "Docker", color: "#0284C7" },
+      { name: "Kubernetes", color: "#9333EA" },
+    ],
   },
   {
-    title: "Seguridad y despliegue serio",
-    description: "Logs, monitoreo, backups, releases controlados. Infraestructura profesional.",
-  },
-];
-
-export const metrics = [
-  { value: "100%", label: "Proyectos entregados a tiempo" },
-  { value: "24/7", label: "Soporte y monitoreo" },
-  { value: "0", label: "Deuda técnica oculta" },
-];
-
-export const testimonials = [
-  {
-    quote: "CODE4CE automatizó nuestro proceso de aprobaciones. Pasamos de 3 días a 2 horas en promedio. El ROI fue evidente desde el primer mes.",
-    author: "María González",
-    role: "Gerente de Operaciones",
-    company: "Retail Company",
-  },
-  {
-    quote: "La integración con nuestro ERP y e-commerce fue impecable. Ahora tenemos visibilidad en tiempo real de inventario y ventas. Decisiones más rápidas.",
-    author: "Carlos Ramírez",
-    role: "Director de TI",
-    company: "E-commerce Platform",
-  },
-  {
-    quote: "El asistente de IA para políticas internas redujo el 80% de consultas repetitivas a RRHH. El equipo puede resolver dudas al instante.",
-    author: "Ana Martínez",
-    role: "Gerente de RRHH",
-    company: "Services Corp",
+    id: "ai-ml",
+    title: "AI & Machine Learning",
+    icon: "AI",
+    gradient: "linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%)",
+    iconColor: "#10B981",
+    technologies: [
+      { name: "OpenAI API", color: "#10B981" },
+    ],
   },
 ];
 
-export const faqs = [
-  {
-    question: "¿Cuánto tiempo toma desarrollar una solución?",
-    answer: "Depende del alcance. Un módulo básico puede estar en producción en 4-6 semanas. Proyectos más complejos se entregan por sprints, con funcionalidades útiles desde las primeras semanas.",
-  },
-  {
-    question: "¿Trabajan con sistemas legacy?",
-    answer: "Sí. Integramos con ERPs, CRMs, bases de datos y APIs existentes. No necesitas cambiar todo tu stack para automatizar procesos específicos.",
-  },
-  {
-    question: "¿Qué incluye el soporte post-lanzamiento?",
-    answer: "Monitoreo 24/7, corrección de bugs, actualizaciones de seguridad y mejoras basadas en uso real. Incluimos documentación técnica y capacitación del equipo.",
-  },
-  {
-    question: "¿Cómo miden el ROI?",
-    answer: "Definimos métricas claras desde el inicio: tiempo ahorrado, errores reducidos, visibilidad mejorada. Reportamos resultados mensuales con datos reales.",
-  },
-  {
-    question: "¿Ofrecen mantenimiento y escalabilidad?",
-    answer: "Sí. Código documentado, arquitectura escalable y planes de mantenimiento. Tu solución crece con tu negocio sin reescribir desde cero.",
-  },
-];
 

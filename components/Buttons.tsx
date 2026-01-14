@@ -22,27 +22,87 @@ export function Button({
   const baseStyles =
     "px-6 py-3 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
 
-  const variants = {
-    primary:
-      "bg-teal-primary text-white hover:bg-teal-dark focus:ring-teal-primary",
-    secondary:
-      "bg-orange-accent text-white hover:bg-orange-accent/90 focus:ring-orange-accent",
-    outline:
-      "border-2 border-teal-primary text-teal-primary hover:bg-teal-primary hover:text-white focus:ring-teal-primary",
+  const getVariantStyles = () => {
+    switch (variant) {
+      case "primary":
+        return {
+          backgroundColor: "#39005E",
+          color: "#ffffff",
+        };
+      case "secondary":
+        return {
+          backgroundColor: "#F86828",
+          color: "#ffffff",
+        };
+      case "outline":
+        return {
+          border: "2px solid #39005E",
+          color: "#39005E",
+          backgroundColor: "transparent",
+        };
+      default:
+        return {
+          backgroundColor: "#39005E",
+          color: "#ffffff",
+        };
+    }
   };
 
-  const styles = `${baseStyles} ${variants[variant]} ${className}`;
+  const variantStyles = getVariantStyles();
+
+  const baseClassName = `${baseStyles} ${className}`;
 
   if (href) {
     return (
-      <Link href={href} className={styles}>
+      <Link 
+        href={href} 
+        className={baseClassName}
+        style={variantStyles}
+        onMouseEnter={(e) => {
+          if (variant === "primary") {
+            e.currentTarget.style.backgroundColor = "#2D0047";
+          } else if (variant === "outline") {
+            e.currentTarget.style.backgroundColor = "#39005E";
+            e.currentTarget.style.color = "#ffffff";
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (variant === "primary") {
+            e.currentTarget.style.backgroundColor = "#39005E";
+          } else if (variant === "outline") {
+            e.currentTarget.style.backgroundColor = "transparent";
+            e.currentTarget.style.color = "#39005E";
+          }
+        }}
+      >
         {children}
       </Link>
     );
   }
 
   return (
-    <button type={type} onClick={onClick} className={styles}>
+    <button 
+      type={type} 
+      onClick={onClick} 
+      className={baseClassName}
+      style={variantStyles}
+      onMouseEnter={(e) => {
+        if (variant === "primary") {
+          e.currentTarget.style.backgroundColor = "#2D0047";
+        } else if (variant === "outline") {
+          e.currentTarget.style.backgroundColor = "#39005E";
+          e.currentTarget.style.color = "#ffffff";
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (variant === "primary") {
+          e.currentTarget.style.backgroundColor = "#39005E";
+        } else if (variant === "outline") {
+          e.currentTarget.style.backgroundColor = "transparent";
+          e.currentTarget.style.color = "#39005E";
+        }
+      }}
+    >
       {children}
     </button>
   );

@@ -10,19 +10,14 @@ import {
   heroCopy,
   services,
   methodology,
-  useCases,
-  technologies,
-  differentiators,
-  metrics,
-  testimonials,
-  faqs,
+  technologyCategories,
+  aboutUs,
   siteConfig,
 } from "@/content/site";
 
 export default function HomePage() {
   const [formData, setFormData] = useState({
     name: "",
-    company: "",
     email: "",
     message: "",
   });
@@ -34,7 +29,7 @@ export default function HomePage() {
     setFormSubmitted(true);
     setTimeout(() => {
       setFormSubmitted(false);
-      setFormData({ name: "", company: "", email: "", message: "" });
+      setFormData({ name: "", email: "", message: "" });
     }, 3000);
   };
 
@@ -44,29 +39,42 @@ export default function HomePage() {
 
       {/* Hero */}
       <Section id="hero" className="pt-32 pb-16">
-        <div className="text-center max-w-4xl mx-auto">
-          <div className="mb-8 flex justify-center">
-            <Image
-              src="/brand/code4ce-logo.png"
-              alt="CODE4CE"
-              width={300}
-              height={100}
-              priority
-            />
-          </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-text mb-6">
-            {heroCopy.headline}
-          </h1>
-          <p className="text-xl text-gray-ui mb-8 max-w-2xl mx-auto">
-            {heroCopy.subheadline}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button href="#contacto" variant="primary">
-              {heroCopy.ctaPrimary}
-            </Button>
-            <Button href="#servicios" variant="outline">
-              {heroCopy.ctaSecondary}
-            </Button>
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="text-center lg:text-left">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6" style={{ color: '#39005E' }}>
+                {heroCopy.headline}
+              </h1>
+              <p className="text-xl mb-8 max-w-2xl" style={{ color: '#6B7280' }}>
+                {heroCopy.subheadline}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Button href="#servicios" variant="outline">
+                  {heroCopy.ctaSecondary}
+                </Button>
+              </div>
+            </div>
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-br from-teal-primary/20 to-[#39005E]/20 rounded-lg blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"></div>
+              <Image
+                src="/brand/home.jpg"
+                alt="Tecnología e innovación"
+                width={800}
+                height={600}
+                className="rounded-xl shadow-2xl transition-all duration-500 group-hover:scale-[1.02] object-cover w-full"
+                style={{
+                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = '0 35px 60px -12px rgba(57, 0, 94, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
+                }}
+                priority
+                quality={95}
+              />
+            </div>
           </div>
         </div>
       </Section>
@@ -74,22 +82,21 @@ export default function HomePage() {
       {/* Servicios */}
       <Section id="servicios" background="gray">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-text mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: '#39005E' }}>
             Servicios
           </h2>
-          <p className="text-gray-ui max-w-2xl mx-auto">
-            Soluciones tecnológicas personalizadas para resolver problemas reales
-            de operación, ventas, inventario, finanzas y gestión.
+          <p className="max-w-2xl mx-auto" style={{ color: '#6B7280' }}>
+            Soluciones tecnológicas personalizadas para resolver problemas reales de tu negocio.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {services.map((service, index) => (
-            <div key={index} className="card">
-              <div className="text-4xl mb-4">{service.icon}</div>
-              <h3 className="text-xl font-semibold text-gray-text mb-2">
+            <div key={index} className="card group hover:border-teal-primary transition-all duration-300">
+              <div className="text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-300">{service.icon}</div>
+              <h3 className="text-2xl font-semibold mb-3 transition-colors duration-300 group-hover:text-teal-primary" style={{ color: '#39005E' }}>
                 {service.title}
               </h3>
-              <p className="text-gray-ui">{service.description}</p>
+              <p style={{ color: '#6B7280' }}>{service.description}</p>
             </div>
           ))}
         </div>
@@ -98,12 +105,11 @@ export default function HomePage() {
       {/* Metodología */}
       <Section id="metodologia">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-text mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: '#39005E' }}>
             Cómo trabajamos
           </h2>
-          <p className="text-gray-ui max-w-2xl mx-auto">
-            Metodología ágil con entregas por sprints y foco en resultados
-            medibles.
+          <p className="max-w-2xl mx-auto" style={{ color: '#6B7280' }}>
+            Metodología ágil con entregas por sprints y foco en resultados medibles.
           </p>
         </div>
         <div className="space-y-8 max-w-4xl mx-auto">
@@ -113,111 +119,101 @@ export default function HomePage() {
               className="flex flex-col sm:flex-row gap-6 items-start"
             >
               <div className="flex-shrink-0">
-                <div className="w-16 h-16 bg-teal-primary text-white rounded-lg flex items-center justify-center text-2xl font-bold">
+                <div className="w-16 h-16 text-white rounded-lg flex items-center justify-center text-2xl font-bold" style={{ backgroundColor: '#39005E' }}>
                   {step.step}
                 </div>
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-semibold text-gray-text mb-2">
+                <h3 className="text-xl font-semibold mb-2" style={{ color: '#39005E' }}>
                   {step.title}
                 </h3>
-                <p className="text-gray-ui">{step.description}</p>
+                <p style={{ color: '#6B7280' }}>{step.description}</p>
               </div>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      {/* Casos de uso */}
-      <Section id="casos-uso" background="gray">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-text mb-4">
-            Casos de uso
-          </h2>
-          <p className="text-gray-ui max-w-2xl mx-auto">
-            Soluciones reales para problemas comunes en empresas.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {useCases.map((useCase, index) => (
-            <div key={index} className="card">
-              <h3 className="text-lg font-semibold text-gray-text mb-2">
-                {useCase.title}
-              </h3>
-              <p className="text-gray-ui text-sm">{useCase.description}</p>
             </div>
           ))}
         </div>
       </Section>
 
       {/* Tecnologías */}
-      <Section id="tecnologias">
+      <Section id="tecnologias" background="gray">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-text mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: '#39005E' }}>
             Tecnologías
           </h2>
-          <p className="text-gray-ui max-w-2xl mx-auto">
+          <p className="max-w-2xl mx-auto" style={{ color: '#6B7280' }}>
             Stack moderno y probado para construir soluciones escalables.
           </p>
         </div>
-        <div className="flex flex-wrap justify-center gap-3">
-          {technologies.map((tech, index) => (
-            <span
-              key={index}
-              className="px-4 py-2 bg-gray-50 border border-gray-light rounded-full text-gray-text font-medium hover:border-teal-primary hover:text-teal-primary transition-colors"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-      </Section>
-
-      {/* Por qué CODE4CE */}
-      <Section id="por-que" background="gray">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-text mb-4">
-            Por qué CODE4CE
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          {metrics.map((metric, index) => (
-            <div key={index} className="text-center">
-              <div className="text-4xl font-bold gradient-text mb-2">
-                {metric.value}
-              </div>
-              <p className="text-gray-ui">{metric.label}</p>
-            </div>
-          ))}
-        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {differentiators.map((diff, index) => (
-            <div key={index} className="card">
-              <h3 className="text-lg font-semibold text-gray-text mb-2">
-                {diff.title}
-              </h3>
-              <p className="text-gray-ui text-sm">{diff.description}</p>
+          {technologyCategories.map((category) => (
+            <div
+              key={category.id}
+              className="rounded-xl p-6 shadow-sm transition-shadow duration-300 hover:shadow-md"
+              style={{
+                background: category.gradient,
+              }}
+            >
+              <div className="flex items-center gap-4 mb-4">
+                <div
+                  className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
+                  style={{ backgroundColor: category.iconColor }}
+                >
+                  {category.icon}
+                </div>
+                <h3 className="text-xl font-bold" style={{ color: '#111827' }}>
+                  {category.title}
+                </h3>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {category.technologies.map((tech, index) => (
+                  <span
+                    key={index}
+                    className="px-3 py-1.5 rounded-full text-sm font-medium text-white"
+                    style={{ backgroundColor: tech.color }}
+                  >
+                    {tech.name}
+                  </span>
+                ))}
+              </div>
             </div>
           ))}
         </div>
       </Section>
 
-      {/* Testimonios */}
-      <Section id="testimonios">
+      {/* Quiénes somos */}
+      <Section id="quienes-somos">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-text mb-4">
-            Testimonios
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: '#39005E' }}>
+            Quiénes somos
           </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonials.map((testimonial, index) => (
-            <div key={index} className="card">
-              <p className="text-gray-ui mb-4 italic">&ldquo;{testimonial.quote}&rdquo;</p>
-              <div>
-                <p className="font-semibold text-gray-text">
-                  {testimonial.author}
-                </p>
-                <p className="text-sm text-gray-ui">
-                  {testimonial.role}, {testimonial.company}
+        <div className="space-y-16 max-w-5xl mx-auto">
+          {aboutUs.map((section, index) => (
+            <div key={index} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+              <div className={index % 2 === 1 ? 'lg:order-2' : ''}>
+                <div className="relative group overflow-hidden rounded-xl shadow-xl">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#39005E]/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 rounded-xl"></div>
+                  <Image
+                    src={index === 0 
+                      ? "/brand/who_am_i_1.jpg"
+                      : index === 1
+                      ? "/brand/who_am_i_2.jpg"
+                      : "/brand/who_am_i_3.jpg"
+                    }
+                    alt={section.title}
+                    width={600}
+                    height={400}
+                    className="rounded-xl transition-all duration-500 group-hover:scale-110 object-cover"
+                    quality={90}
+                  />
+                </div>
+              </div>
+              <div className={index % 2 === 1 ? 'lg:order-1' : ''}>
+                <h3 className="text-2xl font-bold mb-4" style={{ color: '#39005E' }}>
+                  {section.title}
+                </h3>
+                <p className="leading-relaxed" style={{ color: '#6B7280' }}>
+                  {section.description}
                 </p>
               </div>
             </div>
@@ -225,34 +221,14 @@ export default function HomePage() {
         </div>
       </Section>
 
-      {/* FAQ */}
-      <Section id="faq" background="gray">
+      {/* En qué podemos ayudarte */}
+      <Section id="contacto" background="gray">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-text mb-4">
-            Preguntas frecuentes
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: '#39005E' }}>
+            ¿En qué podemos ayudarte?
           </h2>
-        </div>
-        <div className="max-w-3xl mx-auto space-y-6">
-          {faqs.map((faq, index) => (
-            <div key={index} className="card">
-              <h3 className="text-lg font-semibold text-gray-text mb-2">
-                {faq.question}
-              </h3>
-              <p className="text-gray-ui">{faq.answer}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      {/* Contacto */}
-      <Section id="contacto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-text mb-4">
-            Contacto
-          </h2>
-          <p className="text-gray-ui max-w-2xl mx-auto">
-            Agendemos una reunión para entender tus necesidades y proponer una
-            solución.
+          <p className="max-w-2xl mx-auto" style={{ color: '#6B7280' }}>
+            Agendemos una reunión para entender tus necesidades y proponer una solución.
           </p>
         </div>
         <div className="max-w-2xl mx-auto">
@@ -260,7 +236,8 @@ export default function HomePage() {
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-text mb-2"
+                className="block text-sm font-medium mb-2"
+                style={{ color: '#39005E' }}
               >
                 Nombre
               </label>
@@ -272,31 +249,25 @@ export default function HomePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                className="w-full px-4 py-3 border border-gray-light rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-primary focus:border-transparent"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="company"
-                className="block text-sm font-medium text-gray-text mb-2"
-              >
-                Empresa
-              </label>
-              <input
-                type="text"
-                id="company"
-                required
-                value={formData.company}
-                onChange={(e) =>
-                  setFormData({ ...formData, company: e.target.value })
-                }
-                className="w-full px-4 py-3 border border-gray-light rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-primary focus:border-transparent"
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none"
+                style={{ 
+                  borderColor: '#E5E7EB',
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = '#39005E';
+                  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(57, 0, 94, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = '#E5E7EB';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
               />
             </div>
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-text mb-2"
+                className="block text-sm font-medium mb-2"
+                style={{ color: '#39005E' }}
               >
                 Email
               </label>
@@ -308,13 +279,23 @@ export default function HomePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
-                className="w-full px-4 py-3 border border-gray-light rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-primary focus:border-transparent"
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none"
+                style={{ borderColor: '#E5E7EB' }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = '#39005E';
+                  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(57, 0, 94, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = '#E5E7EB';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
               />
             </div>
             <div>
               <label
                 htmlFor="message"
-                className="block text-sm font-medium text-gray-text mb-2"
+                className="block text-sm font-medium mb-2"
+                style={{ color: '#39005E' }}
               >
                 Mensaje
               </label>
@@ -326,7 +307,16 @@ export default function HomePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, message: e.target.value })
                 }
-                className="w-full px-4 py-3 border border-gray-light rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-primary focus:border-transparent resize-none"
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none resize-none"
+                style={{ borderColor: '#E5E7EB' }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = '#39005E';
+                  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(57, 0, 94, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = '#E5E7EB';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
               />
             </div>
             <Button type="submit" variant="primary" className="w-full">
@@ -334,21 +324,15 @@ export default function HomePage() {
             </Button>
           </form>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center text-gray-ui">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center" style={{ color: '#6B7280' }}>
             <a
               href={`mailto:${siteConfig.email}`}
-              className="hover:text-teal-primary transition-colors"
+              className="transition-colors hover:underline"
+              style={{ color: '#39005E' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#00D0C0'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#39005E'}
             >
               📧 {siteConfig.email}
-            </a>
-            <span className="hidden sm:inline">•</span>
-            <a
-              href={`https://wa.me/${siteConfig.whatsapp.replace(/\D/g, "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-teal-primary transition-colors"
-            >
-              💬 WhatsApp
             </a>
           </div>
         </div>

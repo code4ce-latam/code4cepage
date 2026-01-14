@@ -20,9 +20,8 @@ export default function Navbar() {
   const navLinks = [
     { href: "#servicios", label: "Servicios" },
     { href: "#metodologia", label: "Cómo trabajamos" },
-    { href: "#casos-uso", label: "Casos de uso" },
     { href: "#tecnologias", label: "Tecnologías" },
-    { href: "#contacto", label: "Contacto" },
+    { href: "#quienes-somos", label: "Quiénes somos" },
   ];
 
   return (
@@ -39,9 +38,10 @@ export default function Navbar() {
             <Image
               src="/brand/code4ce-mark.png"
               alt="CODE4CE"
-              width={140}
-              height={50}
+              width={130}
+              height={47}
               priority
+              className="object-contain"
             />
           </Link>
 
@@ -51,13 +51,16 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-ui hover:text-teal-primary transition-colors duration-200 font-medium"
+                className="transition-colors duration-200 font-medium"
+                style={{ color: '#6B7280' }}
+                onMouseEnter={(e) => e.currentTarget.style.color = '#39005E'}
+                onMouseLeave={(e) => e.currentTarget.style.color = '#6B7280'}
               >
                 {link.label}
               </Link>
             ))}
             <Button href="#contacto" variant="primary">
-              Agendar reunión
+              Contacto
             </Button>
           </div>
 
@@ -104,7 +107,7 @@ export default function Navbar() {
               className="w-full"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Agendar reunión
+              Contacto
             </Button>
           </div>
         )}
