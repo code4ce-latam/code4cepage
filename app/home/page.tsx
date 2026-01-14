@@ -59,8 +59,8 @@ export default function HomePage() {
               <Image
                 src="/brand/home.jpg"
                 alt="Tecnología e innovación"
-                width={800}
-                height={600}
+                width={350}
+                height={263}
                 className="rounded-xl shadow-2xl transition-all duration-500 group-hover:scale-[1.02] object-cover w-full"
                 style={{
                   boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
@@ -112,25 +112,60 @@ export default function HomePage() {
             Metodología ágil con entregas por sprints y foco en resultados medibles.
           </p>
         </div>
-        <div className="space-y-8 max-w-4xl mx-auto">
-          {methodology.map((step, index) => (
-            <div
-              key={index}
-              className="flex flex-col sm:flex-row gap-6 items-start"
-            >
-              <div className="flex-shrink-0">
-                <div className="w-16 h-16 text-white rounded-lg flex items-center justify-center text-2xl font-bold" style={{ backgroundColor: '#39005E' }}>
-                  {step.step}
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-0">
+          <div className="space-y-4 relative">
+            {methodology.map((step, index) => {
+              // Colores para cada paso según la imagen
+              const stepColors = [
+                '#9333EA', // Morado (Paso 1)
+                '#EC4899', // Rosa (Paso 2)
+                '#EF4444', // Rojo (Paso 3)
+                '#DC2626', // Rojo oscuro (Paso 4)
+                '#F97316', // Naranja (Paso 5)
+              ];
+              
+              const stepColor = stepColors[index] || '#39005E';
+              
+              return (
+                <div key={index} className="relative">
+                  <div
+                    className="relative bg-white rounded-xl shadow-sm p-6 pl-20 sm:pl-28 hover:shadow-md transition-shadow duration-300"
+                  >
+                    {/* Indicador numerado */}
+                    <div 
+                      className="absolute left-4 sm:left-8 top-6 w-12 h-12 rounded-xl text-white flex items-center justify-center text-lg font-bold shadow-md z-20"
+                      style={{ backgroundColor: stepColor }}
+                    >
+                      {step.step}
+                    </div>
+                    
+                    {/* Contenido */}
+                    <div>
+                      <h3 className="text-xl font-bold mb-2" style={{ color: '#111827' }}>
+                        {step.title}
+                      </h3>
+                      <p className="text-base leading-relaxed" style={{ color: '#6B7280' }}>
+                        {step.description}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold mb-2" style={{ color: '#39005E' }}>
-                  {step.title}
-                </h3>
-                <p style={{ color: '#6B7280' }}>{step.description}</p>
-              </div>
-            </div>
-          ))}
+              );
+            })}
+          </div>
+          
+          {/* Línea vertical conectora - desde el centro del paso 1 hasta el inicio del paso 5 */}
+          <div 
+            className="absolute hidden sm:block left-[calc(2rem+1.5rem)]" 
+            style={{ 
+              top: '3rem', 
+              bottom: 'calc(1rem + 1.5rem)', 
+              width: '2px', 
+              background: 'linear-gradient(to bottom, #9333EA 0%, #EC4899 25%, #EF4444 50%, #DC2626 75%, #F97316 100%)', 
+              zIndex: 1,
+              transform: 'translateX(-50%)'
+            }}
+          ></div>
         </div>
       </Section>
 
@@ -327,12 +362,19 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center" style={{ color: '#6B7280' }}>
             <a
               href={`mailto:${siteConfig.email}`}
-              className="transition-colors hover:underline"
+              className="transition-colors hover:underline flex items-center gap-2"
               style={{ color: '#39005E' }}
               onMouseEnter={(e) => e.currentTarget.style.color = '#00D0C0'}
               onMouseLeave={(e) => e.currentTarget.style.color = '#39005E'}
             >
-              📧 {siteConfig.email}
+              <Image
+                src="/brand/email.jpg"
+                alt="Email"
+                width={28}
+                height={28}
+                className="object-contain"
+              />
+              {siteConfig.email}
             </a>
           </div>
         </div>

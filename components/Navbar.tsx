@@ -90,25 +90,29 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden py-4 space-y-4 border-t border-gray-light">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
+          <div className="lg:hidden py-4 border-t border-gray-light">
+            <div className="space-y-4 mb-4">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block text-gray-ui hover:text-teal-primary transition-colors duration-200 font-medium py-2"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+            <div className="mt-6 pt-4 border-t border-gray-light">
+              <Button
+                href="#contacto"
+                variant="primary"
+                className="w-full"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-ui hover:text-teal-primary transition-colors duration-200 font-medium"
               >
-                {link.label}
-              </Link>
-            ))}
-            <Button
-              href="#contacto"
-              variant="primary"
-              className="w-full"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Contacto
-            </Button>
+                Contacto
+              </Button>
+            </div>
           </div>
         )}
       </div>
