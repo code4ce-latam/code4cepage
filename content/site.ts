@@ -2,6 +2,8 @@ export const siteConfig = {
   name: "CODE4CE",
   email: "info@code4ce.com",
   whatsapp: "+1234567890", // placeholder
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://code4ce.com",
+  description: "Construimos software a medida que automatiza procesos e integra datos, usando tecnología moderna e IA aplicada.",
 };
 
 export const introCopy = {

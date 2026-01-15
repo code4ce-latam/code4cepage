@@ -1,261 +1,165 @@
-# Guía de Despliegue en Hetzner
+# Deploy Next.js en Linux con PM2 (Puerto 3000)
 
-Guía paso a paso para desplegar la aplicación Next.js en un servidor Linux de Hetzner.
+## Ubicación del proyecto
 
-## Requisitos Previos
+Ruta: `/var/www/code4ce/code4cepage`
 
-- Servidor Linux en Hetzner (Ubuntu 20.04/22.04 recomendado)
-- Acceso SSH al servidor
-- Dominio configurado apuntando al servidor (code4ce.com)
-- Node.js 18+ instalado
+---
 
-## 1. Preparación del Servidor
-
-### Conectarse al servidor
+## 1) Instalar dependencias y generar build de producción
 
 ```bash
-ssh root@tu-servidor-ip
-```
-
-### Actualizar el sistema
-
-```bash
-apt update && apt upgrade -y
-```
-
-### Instalar Node.js 20.x
-
-```bash
-curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-apt install -y nodejs
-node --version  # Verificar que sea v20.x
-npm --version
-```
-
-### Instalar herramientas adicionales
-
-```bash
-apt install -y git nginx certbot python3-certbot-nginx
-```
-
-## 2. Configurar Usuario y Permisos
-
-### Crear usuario para la aplicación (opcional pero recomendado)
-
-```bash
-adduser code4ce
-usermod -aG sudo code4ce
-su - code4ce
-```
-
-## 3. Clonar el Repositorio
-
-```bash
-cd /home/code4ce  # o el directorio que prefieras
-git clone https://github.com/code4ce-latam/code4cepage.git
-cd code4cepage
-```
-
-## 4. Instalar Dependencias
-
-```bash
-npm install
-```
-
-## 5. Configurar Variables de Entorno
-
-```bash
-nano .env.local
-```
-
-Agregar:
-
-```env
-RESEND_API_KEY=tu_api_key_de_resend
-NODE_ENV=production
-```
-
-Guardar con `Ctrl+O`, `Enter`, `Ctrl+X`
-
-## 6. Build de Producción
-
-```bash
+cd /var/www/code4ce/code4cepage
+npm ci
 npm run build
-```
 
-## 7. Instalar PM2 (Process Manager)
+## 2) Instalar dependencias y generar build de producción
+pm2 start /usr/bin/node --name "code4cepage" --cwd /var/www/code4ce/code4cepage -- \
+  node_modules/next/dist/bin/next start -p 3000 -H 0.0.0.0
 
-```bash
-npm install -g pm2
-```
+## verificar si levanto en el puerto
+pm2 status
+sudo ss -lntp '( sport = :3000 )'
+curl -I http://127.0.0.1:3000
 
-## 8. Configurar PM2
-
-Crear archivo de configuración:
-
-```bash
-nano ecosystem.config.js
-```
-
-Contenido:
-
-```javascript
-module.exports = {
-  apps: [
-    {
-      name: "code4ce",
-      script: "npm",
-      args: "start",
-      cwd: "/home/code4ce/code4cepage",
-      instances: 1,
-      autorestart: true,
-      watch: false,
-      max_memory_restart: "1G",
-      env: {
-        NODE_ENV: "production",
-        PORT: 3000,
-      },
-    },
-  ],
-};
-```
-
-Iniciar la aplicación:
-
-```bash
-pm2 start ecosystem.config.js
+## hacerlo persistente
 pm2 save
-pm2 startup  # Seguir las instrucciones que aparecen
+pm2 startup
 ```
 
-## 9. Configurar Nginx como Reverse Proxy
+## publicacion en la web en code4ce.com
+
+# Guía completa (copiar/pegar) — Publicar Next.js en code4ce.com con PM2 + Nginx + SSL (Let’s Encrypt)
+
+> Objetivo: tener tu Next.js corriendo en el servidor con PM2 en el puerto 3000 (solo localhost), y exponerlo públicamente por Nginx en 80/443 con SSL gratis.
+
+---
+
+## 0) Variables / rutas usadas en este setup
+
+- Proyecto: `/var/www/code4ce/code4cepage`
+- App PM2: `code4cepage`
+- Dominio: `code4ce.com` y `www.code4ce.com`
+- Webroot Let’s Encrypt: `/var/www/letsencrypt`
+- Node: `/usr/bin/node`
+
+---
+
+## 1) Verificar DNS (debe apuntar a la IP pública del servidor)
+
+````bash
+curl -4 ifconfig.me
+dig +short code4ce.com A
+dig +short www.code4ce.com A
+
+
+## Verificar que esten apuntando los dns del dominio que apunten al hosting
+
+## 1) Verificar DNS (debe apuntar a la IP pública del servidor)
 
 ```bash
-sudo nano /etc/nginx/sites-available/code4ce
-```
+curl -4 ifconfig.me
+dig +short code4ce.com A
+dig +short www.code4ce.com A
 
-Contenido:
 
-```nginx
+##Configurar Nginx (reverse proxy + challenge Let’s Encrypt)
+## Crear webroot para challenge
+sudo mkdir -p /var/www/letsencrypt/.well-known/acme-challenge
+sudo chown -R www-data:www-data /var/www/letsencrypt
+
+
+##Crear site Nginx
 server {
-    listen 80;
-    server_name code4ce.com www.code4ce.com;
+  listen 80;
+  server_name code4ce.com www.code4ce.com;
 
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-    }
+  # Let’s Encrypt challenge (NO redirigir)
+  location ^~ /.well-known/acme-challenge/ {
+    root /var/www/letsencrypt;
+    default_type "text/plain";
+    try_files $uri =404;
+  }
+
+  # Redirigir todo lo demás a HTTPS
+  location / {
+    return 301 https://$host$request_uri;
+  }
 }
-```
 
-Habilitar el sitio:
+server {
+  listen 443 ssl http2;
+  server_name code4ce.com www.code4ce.com;
 
-```bash
-sudo ln -s /etc/nginx/sites-available/code4ce /etc/nginx/sites-enabled/
-sudo nginx -t  # Verificar configuración
-sudo systemctl restart nginx
-```
+  # Certificados (los generará Certbot)
+  ssl_certificate     /etc/letsencrypt/live/code4ce.com/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/code4ce.com/privkey.pem;
 
-## 10. Configurar SSL con Let's Encrypt
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
 
-```bash
-sudo certbot --nginx -d code4ce.com -d www.code4ce.com
-```
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
 
-Seguir las instrucciones del asistente. Certbot actualizará automáticamente la configuración de Nginx.
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
+}
 
-## 11. Configurar Firewall
 
-```bash
-sudo ufw allow 22/tcp    # SSH
-sudo ufw allow 80/tcp    # HTTP
-sudo ufw allow 443/tcp  # HTTPS
-sudo ufw enable
-```
+## Habilitar site y recargar Nginx
 
-## 12. Verificar que Todo Funciona
+echo ok | sudo tee /var/www/letsencrypt/.well-known/acme-challenge/ping
+curl -i http://code4ce.com/.well-known/acme-challenge/ping
+curl -i http://www.code4ce.com/.well-known/acme-challenge/ping
 
-```bash
-pm2 status
-pm2 logs code4ce
-sudo systemctl status nginx
-```
 
-## Comandos Útiles para Mantenimiento
+## Instalar Certbot (Let’s Encrypt) — recomendado por SNAP (evita conflictos de Python)
 
-### Ver logs de la aplicación
+sudo snap install core
+sudo snap refresh core
+sudo snap install --classic certbot
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+certbot --version
 
-```bash
-pm2 logs code4ce
-```
 
-### Reiniciar la aplicación
+##Emitir SSL gratis para code4ce.com y www (con redirect a HTTPS)
 
-```bash
-pm2 restart code4ce
-```
+sudo certbot --nginx -d code4ce.com -d www.code4ce.com --redirect
 
-### Actualizar el código
 
-```bash
-cd /home/code4ce/code4cepage
-git pull
-npm install
-npm run build
-pm2 restart code4ce
-```
-
-### Ver estado de PM2
-
-```bash
-pm2 status
-pm2 monit
-```
-
-### Reiniciar Nginx
-
-```bash
-sudo systemctl restart nginx
-```
-
-## Troubleshooting
-
-### La aplicación no inicia
-
-```bash
-pm2 logs code4ce --lines 50
-```
-
-### Error de permisos
-
-```bash
-sudo chown -R code4ce:code4ce /home/code4ce/code4cepage
-```
-
-### Puerto 3000 en uso
-
-```bash
-lsof -i :3000
-kill -9 <PID>
-```
-
-### Verificar que Nginx está funcionando
-
-```bash
-sudo systemctl status nginx
+## verficar
 sudo nginx -t
-```
+sudo systemctl reload nginx
+curl -I https://code4ce.com
+curl -I https://www.code4ce.com
 
-## Notas Importantes
 
-- Asegúrate de que el dominio `code4ce.com` apunte al IP de tu servidor Hetzner
-- Verifica que los registros DNS de Resend estén configurados correctamente
-- El archivo `.env.local` debe contener `RESEND_API_KEY` para que el formulario funcione
-- PM2 mantendrá la aplicación corriendo incluso después de reiniciar el servidor
+##Renovación automática (verificación)
+sudo certbot renew --dry-run
+
+
+## (Recomendado) Recargar Nginx cuando renueve:
+
+sudo certbot renew --deploy-hook "systemctl reload nginx"
+
+
+## Firewall recomendado (solo 80/443 públicos)
+
+sudo ufw allow 'Nginx Full'
+sudo ufw delete allow 3000/tcp 2>/dev/null || true
+sudo ufw reload
+sudo ufw status
+
+## Comandos útiles
+#Logs de la app:
+
+pm2 logs code4cepage --lines 100
+
+#Reiniciar app:
+pm2 restart code4cepage
+
+````
