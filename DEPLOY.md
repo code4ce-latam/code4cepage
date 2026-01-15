@@ -6,6 +6,8 @@ Ruta: `/var/www/code4ce/code4cepage`
 
 ---
 
+## si da error de permsiso poner sudo npm ....
+
 ## 1) Instalar dependencias y generar build de producción
 
 ```bash

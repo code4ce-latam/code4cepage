@@ -40,7 +40,7 @@ export default function IntroScreen() {
 
   return (
     <div
-      className="fixed inset-0 bg-white z-[9999] relative overflow-hidden"
+      className="fixed inset-0 bg-gray-900 z-[9999] relative overflow-hidden"
       style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -86,7 +86,7 @@ export default function IntroScreen() {
             />
           </div>
 
-          <h2 className={`font-bold ${isMobile ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl'}`} style={{ color: '#39005E' }}>
+          <h2 className={`font-bold ${isMobile ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl'} text-white`}>
             <StreamingText text="Fuerza, tecnología y soluciones de software a medida" />
           </h2>
 
