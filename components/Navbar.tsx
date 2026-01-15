@@ -26,11 +26,14 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        isScrolled
-          ? "bg-white shadow-md"
-          : "bg-white/95 backdrop-blur-sm"
-      }`}
+      className="fixed top-0 left-0 right-0 z-40 transition-all duration-300 text-white"
+      style={{
+        backgroundColor: "#39005E",
+        ...(isScrolled && {
+          boxShadow:
+            "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+        }),
+      }}
     >
       <div className="container-custom">
         <div className="flex items-center justify-between h-16 lg:h-20">
@@ -52,9 +55,9 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 className="transition-colors duration-200 font-medium"
-                style={{ color: '#6B7280' }}
-                onMouseEnter={(e) => e.currentTarget.style.color = '#39005E'}
-                onMouseLeave={(e) => e.currentTarget.style.color = '#6B7280'}
+                style={{ color: "#ffffff" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#00D0C0")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "#ffffff")}
               >
                 {link.label}
               </Link>
@@ -67,7 +70,7 @@ export default function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 text-gray-text focus:outline-none focus:ring-2 focus:ring-teal-primary rounded"
+            className="lg:hidden p-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-primary rounded"
             aria-label="Toggle menu"
           >
             <svg
@@ -90,20 +93,20 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-gray-light">
+          <div className="lg:hidden py-4 border-t border-white/20">
             <div className="space-y-4 mb-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block text-gray-ui hover:text-teal-primary transition-colors duration-200 font-medium py-2"
+                  className="block text-white hover:text-teal-primary transition-colors duration-200 font-medium py-2"
                 >
                   {link.label}
                 </Link>
               ))}
             </div>
-            <div className="mt-6 pt-4 border-t border-gray-light">
+            <div className="mt-6 pt-4 border-t border-white/20">
               <Button
                 href="#contacto"
                 variant="primary"
@@ -119,4 +122,3 @@ export default function Navbar() {
     </nav>
   );
 }
-
